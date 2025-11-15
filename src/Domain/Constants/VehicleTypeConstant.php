@@ -5,9 +5,9 @@ namespace App\Domain\Constants;
 
 final class VehicleTypeConstant
 {
-    public const CAR = 'carro';
+    public const CARRO = 'carro';
     public const MOTO = 'moto';
-    public const TRUCK = 'caminhao';
+    public const CAMINHAO = 'caminhao';
 
     /**
      *@return string[]
