@@ -46,7 +46,7 @@ Faturamento total
  Arquitetura do Projeto
 
 Padrão utilizado: Arquitetura em camadas + princípios SOLID
-
+```
 index.php
 src/
 │
@@ -90,6 +90,7 @@ storage/
 vendor/
 composer.json
 composer.lock
+```
 
 SOLID aplicado
 
