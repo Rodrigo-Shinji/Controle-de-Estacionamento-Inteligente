@@ -28,7 +28,7 @@ final class VehicleTypeValidator
         $plateRegex = '/^([A-Z]{3}\d{4})|([A-Z]{3}\d{1}[A-Z]{1}\d{2})$/'; 
         
         if (strlen($normalizedPlate) !== 7 || !preg_match($plateRegex, $normalizedPlate)) {
-            $errors[] = 'Placa inválida! Utilize o formato de 7 caracteres alfanuméricos (Padrão Antigo ou Mercosul), com ou sem hífen (Ex: ABC-1234 ou ABC1B23).';
+            $errors[] = 'Placa inválida! Utilize o formato de 7 caracteres alfanuméricos (Padrão Placa Cinza ou Marcosul)';
         }
 
         if (!VehicleTypeConstant::isValid($type)) {
