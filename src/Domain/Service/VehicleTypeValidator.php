@@ -1,29 +1,33 @@
 <?php
 declare(strict_types=1);
 
-final class VehicleValidator
+namespace Parking\Domain\Service;
+
+use Parking\Domain\Constants\VehicleTypeConstant;
+
+final class VehicleTypeValidator
 {
     /**
      * @param array{
      * vehicle_type?:string,
      * plate?:string,
      * time?:string,
-     * } $input
+     * }$input
      * @return string[]
      */
-
-    public function validate(array $input): array{
+    public function validate(array $input): array
+    {
         $errors = [];
 
         $type = strtolower(trim((string)($input['vehicle_type'] ?? '')));
         $plate = strtoupper(trim((string)($input['plate'] ?? '')));
+        $when = (string)($input['time'] ?? '');
 
-        if ($plate == '' || !preg_match('/^[A-Z0-9-]{5,10}$/', $plate)){
-            $erros[] = 'Placa inválida!';
+        if ($plate == '' || !preg_match('/^[A-Z0-9-]{5,10}$/', $plate)) {
+            $errors[] = 'Placa inválida!';
         }
 
-        $allowed = ['carro','moto','caminhao'];
-        if (!in_array($type, $allowed, true)){
+        if (!VehicleTypeConstant::isValid($type)) {
             $errors[] = 'Tipo de veículo inválido!';
         }
 
@@ -34,10 +38,3 @@ final class VehicleValidator
         return $errors;
     }
 }
-
-
-
-
-
-
-?>

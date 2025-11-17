@@ -6,5 +6,5 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Japanoth\\Finalsolid\\' => array($baseDir . '/src'),
+    'Parking\\' => array($baseDir . '/src'),
 );

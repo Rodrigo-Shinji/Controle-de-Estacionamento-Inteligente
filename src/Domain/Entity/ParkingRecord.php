@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Parking\Domain\Entity;
 
 use DateTimeImmutable;
+use RuntimeException;
 
 class ParkingRecord
 {
@@ -48,16 +49,15 @@ class ParkingRecord
         );
     }
     
-    public function checkout(float $totalFare): void
+    public function checkout(float $totalFare, DateTimeImmutable $timeOut): void
     {
         if ($this->timeOut !== null) {
-            throw new \RuntimeException("O veículo já fez o Check-Out.");
+            throw new RuntimeException("O veículo já fez o Check-Out.");
         }
         
-        $this->timeOut = new DateTimeImmutable();
+        $this->timeOut = $timeOut; 
         $this->totalFare = $totalFare;
     }
-
 
     public function getId(): ?int
     {

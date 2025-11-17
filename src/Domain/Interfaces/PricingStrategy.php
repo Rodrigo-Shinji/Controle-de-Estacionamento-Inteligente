@@ -11,8 +11,8 @@ interface PricingStrategy
     public function getHourlyRate(): float;
 
     /**
-     * @param DateTimeInterface $timeIn horário de entrada 
-     * @param DateTimeInterface $timeOut horário de saída
+     * @param DateTimeInterface $timeIn
+     * @param DateTimeInterface $timeOut
      * @return float
      */
     public function calculateTotal(DateTimeInterface $timeIn, DateTimeInterface $timeOut): float;

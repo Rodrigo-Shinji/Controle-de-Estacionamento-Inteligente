@@ -1,4 +1,4 @@
-<?php 
+<?php
 declare(strict_types=1);
 
 namespace Parking\Infra\Database;
@@ -7,7 +7,7 @@ use \PDO;
 
 class SQLiteConnection
 {
-    private const DB_FILE = __DIR__ . '/../../../Domain/storage/database.sqlite';
+    private const DB_FILE = __DIR__ . '/../../Domain/storage/database.sqlite';
     
     public static function connect(): PDO
     {
@@ -23,4 +23,3 @@ class SQLiteConnection
         }
     }
 }
-

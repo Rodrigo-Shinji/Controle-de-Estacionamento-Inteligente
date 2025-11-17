@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Domain\Constants;
+namespace Parking\Domain\Constants;
 
 final class VehicleTypeConstant
 {
-    public const CARRO = 'carro';
+    public const CAR = 'carro';
     public const MOTO = 'moto';
-    public const CAMINHAO = 'caminhao';
+    public const TRUCK = 'caminhao';
 
     /**
-     *@return string[]
+     * @return string[]
      */
     public static function getTypes(): array
     {

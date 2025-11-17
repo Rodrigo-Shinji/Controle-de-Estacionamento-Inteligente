@@ -1,14 +1,13 @@
 <?php
-declare(strict_types=1);    
+declare(strict_types=1);
 
-namespace Parking\Domain\Pricing;
+namespace Parking\Domain\Service;
 
-use Parking\Domain\Interfaces\PricingStrategy;
 use DateTimeInterface;
 
-class CarPricingStrategy implements PricingStrategy
+class CarPricingStrategy extends AbstractHourlyPricingStrategy
 {
-    private const HOURLY_RATE = 5.00;
+    private const HOURLY_RATE = 5.00; 
 
     public function getHourlyRate(): float
     {
@@ -18,16 +17,5 @@ class CarPricingStrategy implements PricingStrategy
     public function calculateTotal(DateTimeInterface $timeIn, DateTimeInterface $timeOut): float
     {
         return $this->calculateTotalStrategy($timeIn, $timeOut, self::HOURLY_RATE);
-    }
-    
-    private function calculateTotalStrategy(DateTimeInterface $timeIn, DateTimeInterface $timeOut, float $rate): float
-    {
-        $diff = $timeOut->getTimestamp() - $timeIn->getTimestamp();
-        
-        $hoursFloat = $diff / 3600; 
-        
-        $chargedHours = ceil($hoursFloat);
-        
-        return $chargedHours * $rate;
     }
 }

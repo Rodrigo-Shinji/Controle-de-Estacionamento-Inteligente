@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Entity;
 
-use App\Domain\Constants\VehicleTypeConstant;
+use Parking\Domain\Constants\VehicleTypeConstant;
 use InvalidArgumentException;
 
 class Vehicle
