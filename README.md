@@ -91,7 +91,7 @@ vendor/
 composer.json
 composer.lock
 
-✔ SOLID aplicado
+SOLID aplicado
 
 SRP: classes específicas para entidade, repositório e serviço
 
@@ -103,7 +103,7 @@ ISP: interfaces separadas para repositório e precificação
 
 DIP: casos de uso dependem de abstrações
 
-✔ Outros princípios
+Outros princípios
 
 DRY: sem duplicação de lógica
 
@@ -111,7 +111,7 @@ KISS: código direto e limpo
 
 Object Calisthenics aplicado durante commits e revisões
 
-🛠 Tecnologias Utilizadas
+Tecnologias Utilizadas
 
 PHP 8.2+
 
@@ -125,7 +125,7 @@ HTML + Tailwind CSS (opcional)
 
 SweetAlert2 (opcional)
 
-▶ Como Executar o Projeto
+Como Executar o Projeto
 1. Clone o repositório
 git clone https://github.com/SEU-USUARIO/Controle-de-Estacionamento-Inteligente-main.git
 
