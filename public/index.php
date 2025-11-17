@@ -19,13 +19,14 @@ $checkInService = new CheckInService($repository, $strategyFactory, $validator);
 $checkOutService = new CheckOutService($repository);
 $reportService = new ReportService($repository);
 
-$message = null;
-$error = null;
+$message = $_GET['message'] ?? null;
+$error = $_GET['error'] ?? null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     
     $plate = strtoupper(trim($_POST['plate'] ?? ''));
-
+    $redirect_params = [];
+    
     try {
         if ($_POST['action'] === 'check_in') {
             $vehicleType = strtolower(trim($_POST['vehicle_type'] ?? ''));
@@ -37,22 +38,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             ];
             
             $record = $checkInService->execute($input);
-            $message = "✅ Check-In de **{$plate}** (Tarifa: R$ " . number_format($record->getHourlyRate(), 2, ',', '.') . "/h) registrado com sucesso!";
+            $msg = "Check-In de **{$plate}** (Tarifa: R\$ " . number_format($record->getHourlyRate(), 2, ',', '.') . "/h) registrado com sucesso!";
+            $redirect_params['message'] = urlencode($msg);
 
         } elseif ($_POST['action'] === 'check_out') {
             
-            $timeOut = new DateTimeImmutable();
-            $record = $checkOutService->execute($plate, $timeOut);
+            $vehicleType = strtolower(trim($_POST['vehicle_type'] ?? ''));
             
-            $message = "✅ Check-Out de **{$plate}** realizado! Total a Pagar: **R$ " . number_format($record->getTotalFare(), 2, ',', '.') . "**";
+            $timeOut = new DateTimeImmutable();
+
+            $record = $checkOutService->execute($plate, $vehicleType, $timeOut);
+            
+            $fareFormatted = number_format($record->getTotalFare(), 2, ',', '.');
+            $msg = "Check-Out de **{$plate}** realizado! Valor Pago: **R\$ {$fareFormatted}**";
+            $redirect_params['message'] = urlencode($msg);
         }
+
     } catch (\InvalidArgumentException $e) {
-        $error = "🚨 ERRO DE VALIDAÇÃO: " . $e->getMessage();
+        $err = "ERRO DE VALIDAÇÃO: " . $e->getMessage();
+        $redirect_params['error'] = urlencode($err);
     } catch (\RuntimeException $e) {
-        $error = "🚨 ERRO DE EXECUÇÃO: " . $e->getMessage();
+        $err = "ERRO DE EXECUÇÃO: " . $e->getMessage();
+        $redirect_params['error'] = urlencode($err);
     } catch (\Exception $e) {
-        $error = "🚨 ERRO INESPERADO: " . $e->getMessage();
+        $err = "ERRO INESPERADO: " . $e->getMessage();
+        $redirect_params['error'] = urlencode($err);
     }
+    
+    $query = http_build_query($redirect_params);
+    header("Location: index.php?" . $query);
+    exit;
+}
+
+try {
+    $allRecords = $repository->findAll(); 
+} catch (\Exception $e) {
+    $error = "Erro ao buscar registros: " . $e->getMessage();
+    $allRecords = [];
 }
 ?>
 <!DOCTYPE html>
@@ -63,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     <title>Estacionamento SOLID</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        .container { max-width: 1000px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
         h1, h2 { color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; }
         form { margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 4px; background: #fafafa; }
         label { display: block; margin-bottom: 5px; font-weight: bold; }
@@ -82,13 +104,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 <body>
 
 <div class="container">
-    <h1>🅿️ Sistema de Estacionamento SOLID</h1>
+    <h1>Sistema de Estacionamento Inteligente SOLID</h1>
 
     <?php if ($message): ?>
-        <div class="message success"><?php echo $message; ?></div>
+        <div class="message success"><?php echo urldecode($message); ?></div>
     <?php endif; ?>
     <?php if ($error): ?>
-        <div class="message error"><?php echo $error; ?></div>
+        <div class="message error"><?php echo urldecode($error); ?></div>
     <?php endif; ?>
 
     <form method="POST">
@@ -96,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         <input type="hidden" id="action" name="action" value="check_in">
         
         <label for="plate">Placa do Veículo:</label>
-        <input type="text" id="plate" name="plate" placeholder="Ex: ABC-1234" required maxlength="10">
+        <input type="text" id="plate" name="plate" placeholder="Ex: ABC-1234" required maxlength="8">
 
         <label for="vehicle_type">Categoria:</label>
         <select id="vehicle_type" name="vehicle_type" required>
@@ -115,41 +137,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
     <hr>
     
-    <h2>📊 Relatório de Faturamento</h2>
-    <?php
-    try {
-        $report = $reportService->generateFaturamentoReport();
-        echo "<p>Total de Veículos Registrados (Entradas): <strong>{$report['totalVeiculos']}</strong></p>";
-        echo "<p>Faturamento Total (Encerrados): <strong>R$ " . number_format($report['faturamentoTotal'], 2, ',', '.') . "</strong></p>";
-    ?>
-
+    <h2>Histórico de Registros</h2>
     <table class="report-table">
         <thead>
             <tr>
+                <th>ID</th>
+                <th>Placa</th>
                 <th>Tipo</th>
-                <th>Contagem</th>
-                <th>Tarifa/Hora</th>
-                <th>Faturamento (Encerrado)</th>
+                <th>Entrada</th>
+                <th>Saída</th>
+                <th>Taxa/Hora</th>
+                <th>Valor Final</th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($report['detalhePorTipo'] as $type => $detail): ?>
-            <tr>
-                <td><?php echo ucfirst($type); ?></td>
-                <td><?php echo $detail['count']; ?></td>
-                <td>R$ <?php echo number_format($detail['tarifa_hora'], 2, ',', '.'); ?></td>
-                <td>R$ <?php echo number_format($detail['faturamento'], 2, ',', '.'); ?></td>
-            </tr>
-            <?php endforeach; ?>
+            <?php if (!empty($allRecords)): ?>
+                <?php foreach ($allRecords as $record): 
+                    $entryTime = $record->getTimeIn()->format('d/m H:i:s');
+                    $exitTime = $record->getTimeOut() ? $record->getTimeOut()->format('d/m H:i:s') : '<span style="color: green; font-weight: bold;">Em Aberto</span>';
+                    $finalFare = $record->getTotalFare() ? number_format($record->getTotalFare(), 2, ',', '.') : '-';
+                ?>
+                <tr>
+                    <td><?php echo $record->getId(); ?></td>
+                    <td><?php echo $record->getPlate(); ?></td>
+                    <td><?php echo ucfirst($record->getVehicleType()); ?></td>
+                    <td><?php echo $entryTime; ?></td>
+                    <td><?php echo $exitTime; ?></td>
+                    <td>R$ <?php echo number_format($record->getHourlyRate(), 2, ',', '.'); ?></td>
+                    <td>R$ <?php echo $finalFare; ?></td>
+                </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7" style="text-align: center;">Nenhum registro encontrado no banco de dados.</td>
+                </tr>
+            <?php endif; ?>
         </tbody>
     </table>
-
-    <?php 
-    } catch (\Exception $e) {
-        echo "<p class='error'>Erro ao gerar relatório: " . $e->getMessage() . "</p>";
-    }
-    ?>
-</div>
 
 </body>
 </html>

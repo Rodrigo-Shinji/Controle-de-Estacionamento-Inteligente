@@ -8,7 +8,7 @@ use Parking\Domain\Interfaces\ParkingRecordRepository;
 use Parking\Domain\Service\PricingStrategyFactory; 
 use Parking\Domain\Service\VehicleTypeValidator; 
 use InvalidArgumentException;
-
+use RuntimeException;
 class CheckInService
 {
     private ParkingRecordRepository $repository;
@@ -29,6 +29,7 @@ class CheckInService
      * @param array $input
      * @return ParkingRecord
      * @throws InvalidArgumentException
+     * @throws RuntimeException
      */
     public function execute(array $input): ParkingRecord
     {
@@ -40,6 +41,10 @@ class CheckInService
         $plate = $input['plate'];
         $vehicleType = $input['vehicle_type'];
 
+        if ($this->repository->findActiveByPlate($plate)) {
+            throw new InvalidArgumentException("A placa **{$plate}** já está registrada e ainda não fez Check-Out. Não é possível realizar um novo Check-In.");
+        }
+        
         $strategy = $this->strategyFactory->getStrategy($vehicleType);
         $hourlyRate = $strategy->getHourlyRate();
         
@@ -51,6 +56,12 @@ class CheckInService
 
         $this->repository->save($record);
 
-        return $record;
+        $savedRecord = $this->repository->findActiveByPlate($plate);
+
+        if ($savedRecord === null) {
+            throw new RuntimeException("Falha ao recuperar o registro após o Check-In. Verifique a conexão com o banco de dados.");
+        }
+
+        return $savedRecord;
     }
 }

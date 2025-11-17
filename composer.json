@@ -1,10 +1,22 @@
 {
-    "name": "japanoth/finalsolid",
+    "name": "rodrigo/finalsolid",
+    "description": "Sistema de Estacionamento em PHP 8 seguindo Princípios SOLID (SQLite via PDO)",
+    "type": "project",
     "license": "MIT",
+    "require": {
+        "php": ">=8.0"
+    },
     "autoload": {
         "psr-4": {
             "Parking\\": "src/"
         }
     },
-    "require": {}
+    "scripts": {
+        "dump": "composer dump-autoload",
+        "serve": "php -S localhost:8000 -t public",
+        "migrate": "php storage/migrate.php"
+    },
+    "config": {
+        "sort-packages": true
+    }
 }

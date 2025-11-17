@@ -20,7 +20,7 @@ class SQLiteParkingRecordRepository implements ParkingRecordRepository
 
     public function save(ParkingRecord $record): void
     { 
-        $sql = "INSERT INTO passages (plate, vehicle_type, time_in, time_out, hourly_rate, total_fare) 
+        $sql = "INSERT INTO vehicles (plate, vehicle_type, time_in, time_out, hourly_rate, total_fare) 
                 VALUES (:plate, :vehicle_type, :time_in, :time_out, :hourly_rate, :total_fare)";
         
         $stmt = $this->pdo->prepare($sql);
@@ -37,7 +37,7 @@ class SQLiteParkingRecordRepository implements ParkingRecordRepository
         
     public function findById(int $id): ?ParkingRecord
     {
-        $sql = "SELECT * FROM passages WHERE id = :id";
+        $sql = "SELECT * FROM vehicles WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':id' => $id]);
         $data = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -51,7 +51,7 @@ class SQLiteParkingRecordRepository implements ParkingRecordRepository
     
     public function findAll(): array
     {
-        $sql = "SELECT * FROM passages ORDER BY time_in DESC";
+        $sql = "SELECT * FROM vehicles ORDER BY time_in DESC";
         $stmt = $this->pdo->query($sql);
         $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -76,4 +76,19 @@ class SQLiteParkingRecordRepository implements ParkingRecordRepository
             $data['total_fare'] !== null ? (float)$data['total_fare'] : null
         );
     }
+
+    public function findActiveByPlate(string $plate): ?ParkingRecord
+{
+    $sql = "SELECT * FROM vehicles WHERE plate = :plate AND time_out IS NULL ORDER BY time_in DESC LIMIT 1";
+    
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([':plate' => $plate]);
+    $data = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+    if (!$data) {
+        return null;
+    }
+
+    return $this->mapToEntity($data); 
+}
 }

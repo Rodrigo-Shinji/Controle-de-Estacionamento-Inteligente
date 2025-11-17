@@ -13,7 +13,7 @@ $pdo = new PDO('sqlite:' . $dbPath);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $sql = <<<SQL
-CREATE TABLE IF NOT EXISTS passages (
+CREATE TABLE IF NOT EXISTS vehicles (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   plate TEXT NOT NULL,
   vehicle_type TEXT NOT NULL,
@@ -26,7 +26,7 @@ SQL;
 
 $pdo->exec($sql);
 
-echo "OK: database.sqlite e tabela passages criados/atualizados.\n";
+echo "OK: database.sqlite e tabela vehicles criados/atualizados.\n";
 } catch (\PDOException $e) {
     echo "Erro ao executar a migração: " . $e->getMessage() . "\n";
 }
