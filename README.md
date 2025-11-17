@@ -2,7 +2,7 @@ Controle de Estacionamento Inteligente
 
 Projeto acadêmico – PHP 8, SQLite, SOLID, Clean Code
 
- Sobre o Projeto
+## Descrição do Projeto
 
 Este projeto implementa um sistema de controle de estacionamento com cadastro de entradas e saídas, cálculo automático de tarifas por tempo de permanência, relatórios de faturamento e aplicação rigorosa de princípios de SOLID, DRY, KISS, Clean Code e Object Calisthenics.
 
@@ -10,7 +10,7 @@ O sistema foi desenvolvido em PHP 8.2+, com banco SQLite, utilizando Composer e 
 
 Objetivos
 
-Registrar entrada e saída de veículos.
+#Registrar entrada e saída de veículos.
 
 Calcular tarifas com base no tempo de permanência e tipo de veículo.
 
@@ -92,7 +92,7 @@ composer.json
 composer.lock
 ```
 
-SOLID aplicado
+# SOLID aplicado
 
 SRP: classes específicas para entidade, repositório e serviço
 
@@ -126,7 +126,7 @@ HTML + Tailwind CSS (opcional)
 
 SweetAlert2 (opcional)
 
-Como Executar o Projeto
+## Como Executar o projeto
 1. Clone o repositório
 git clone https://github.com/SEU-USUARIO/Controle-de-Estacionamento-Inteligente-main.git
 
@@ -164,9 +164,7 @@ Interface simples e funcional
 
 Demonstração
 
-
-
-Integrantes do Grupo
+## Integrantes
 Guilherme Dorce the Britto
 Rodrigo Shinji Yamashita
 Thiago Tsuyoshi Okada Aoki
