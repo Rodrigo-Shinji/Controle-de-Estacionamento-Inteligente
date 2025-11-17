@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 $dir = __DIR__;
-$dbPath = $dir . '/storage/database.sqlite';
+$dbPath = $dir . '/database.sqlite';
 
 if (!is_dir($dir)) {
     mkdir($dir, 0777, true);
