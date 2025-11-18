@@ -118,7 +118,7 @@ try {
         <input type="hidden" id="action" name="action" value="check_in">
         
         <label for="plate">Placa do Veículo:</label>
-        <input type="text" id="plate" name="plate" placeholder="Ex: ABC-1234" required maxlength="8">
+        <input type="text" id="plate" name="plate" placeholder="Ex: ABC-1234" required maxlength="7">
 
         <label for="vehicle_type">Categoria:</label>
         <select id="vehicle_type" name="vehicle_type" required>
