@@ -53,11 +53,9 @@ index.php
 src/
 │
 ├── Application/
-│   └── Service/
-│       ├── CheckInService.php
-│       ├── CheckOutService.php
-│       ├── ParkingPriceCalculator.php
-│       └── ReportService.php
+│   ├── CheckInService.php
+│   ├── CheckOutService.php
+│   └── ReportService.php
 │
 ├── Domain/
 │   ├── Constants/
@@ -168,9 +166,8 @@ Demonstração
 
 ## Integrantes
 ```
-Guilherme Dorce the Britto
-Rodrigo Shinji Yamashita
-Thiago Tsuyoshi Okada Aoki
+Guilherme Dorce the Britto RA: 1991866
+Rodrigo Shinji Yamashita   RA: 2001443
 ```
 Decisões de Projeto
 

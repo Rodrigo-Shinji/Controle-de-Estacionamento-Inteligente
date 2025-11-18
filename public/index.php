@@ -6,9 +6,9 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Parking\Infra\Repository\SQLiteParkingRecordRepository;
 use Parking\Domain\Service\PricingStrategyFactory;
 use Parking\Domain\Service\VehicleTypeValidator;
-use Parking\Application\Service\CheckInService;
-use Parking\Application\Service\CheckOutService;
-use Parking\Application\Service\ReportService;
+use Parking\Application\CheckInService;
+use Parking\Application\CheckOutService;
+use Parking\Application\ReportService;
 use Parking\Domain\Constants\VehicleTypeConstant;
 
 $repository = new SQLiteParkingRecordRepository();
@@ -118,7 +118,7 @@ try {
         <input type="hidden" id="action" name="action" value="check_in">
         
         <label for="plate">Placa do Veículo:</label>
-        <input type="text" id="plate" name="plate" placeholder="Ex: ABC-1234" required maxlength="7">
+        <input type="text" id="plate" name="plate" placeholder="Ex: ABC1234" required maxlength="7">
 
         <label for="vehicle_type">Categoria:</label>
         <select id="vehicle_type" name="vehicle_type" required>
