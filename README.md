@@ -8,6 +8,8 @@ Este projeto implementa um sistema de controle de estacionamento com cadastro de
 
 O sistema foi desenvolvido em PHP 8.2+, com banco SQLite, utilizando Composer e uma arquitetura modular dividida em Application, Domain e Infra.
 
+Vídeo Apresentação: https://www.youtube.com/watch?v=-3f_1ZjwsUU&feature=youtu.be
+
 Objetivos
 
 #Registrar entrada e saída de veículos.
@@ -146,7 +148,7 @@ php -S localhost:8000 -t public
 
 Abra no navegador:
 
-http://localhost:8000
+http://localhost/Controle-de-Estacionamento-Inteligente-main/
 
 Funcionalidades Principais
 
