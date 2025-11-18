@@ -165,10 +165,11 @@ Interface simples e funcional
 Demonstração
 
 ## Integrantes
+```
 Guilherme Dorce the Britto
 Rodrigo Shinji Yamashita
 Thiago Tsuyoshi Okada Aoki
-
+```
 Decisões de Projeto
 
 A arquitetura modular foi escolhida para facilitar extensões (ex: novos tipos de tarifa).
