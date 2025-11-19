@@ -16,10 +16,11 @@ class ParkingPriceCalculator
     }
 
     /**
-     * @return float O valor total calculado.
+     * @return float
      */
     public function calculate(DateTimeInterface $timeIn, DateTimeInterface $timeOut): float
     {
         return $this->strategy->calculateTotal($timeIn, $timeOut);
     }
+
 }
